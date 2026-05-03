@@ -171,7 +171,7 @@ def load_image(idx):
     return cv2.resize(img, SIZE)
 
 
-def save_comparison(original, enhanced, filename):
+def show_comparison(original, enhanced, filename):
     if original.shape != enhanced.shape:
         enhanced = cv2.resize(enhanced, (original.shape[1], original.shape[0]))
 
@@ -199,7 +199,7 @@ def save_comparison(original, enhanced, filename):
 def enhance_noisy(img, idx):
     print("\n[Noisy] Processing image " + str(idx))
     bilateral = cv2.bilateralFilter(img, d=20, sigmaColor=50, sigmaSpace=50)
-    save_comparison(img, bilateral, "noisy_image_" + str(idx) + "_enhanced.png")
+    show_comparison(img, bilateral, "noisy_image_" + str(idx) + "_enhanced.png")
     cv2.imwrite(output + "noisy_image_" + str(idx) + "_result.jpg", bilateral)
     return bilateral
 
@@ -213,7 +213,7 @@ def enhance_blurred(img, idx):
     laplacian = cv2.Laplacian(img, cv2.CV_64F)
     laplacian = np.uint8(np.abs(laplacian))
     sharpened = cv2.add(img, laplacian)
-    save_comparison(img, sharpened, "blurred_image_" + str(idx) + "_enhanced.png")
+    show_comparison(img, sharpened, "blurred_image_" + str(idx) + "_enhanced.png")
     cv2.imwrite(output + "blurred_image_" + str(idx) + "_result.jpg", sharpened)
     return sharpened
 
@@ -238,7 +238,7 @@ def enhance_low_light(img, idx):
     clahe = cv2.createCLAHE(clipLimit=2, tileGridSize=(8, 8))
     l_eq = clahe.apply(l)
     enhanced = cv2.cvtColor(cv2.merge([l_eq, a, b]), cv2.COLOR_LAB2BGR)
-    save_comparison(img, enhanced, "lowlight_image_" + str(idx) + "_enhanced.png")
+    show_comparison(img, enhanced, "lowlight_image_" + str(idx) + "_enhanced.png")
     cv2.imwrite(output + "lowlight_image_" + str(idx) + "_result.jpg", enhanced)
     return enhanced
 
@@ -262,7 +262,7 @@ def enhance_low_contrast(img, idx):
     clahe = cv2.createCLAHE(clipLimit=1.0, tileGridSize=(8, 8))
     l_eq = clahe.apply(l)
     enhanced = cv2.cvtColor(cv2.merge([l_eq, a, b_ch]), cv2.COLOR_LAB2BGR)
-    save_comparison(img, enhanced, "lowcontrast_image_" + str(idx) + "_enhanced.png")
+    show_comparison(img, enhanced, "lowcontrast_image_" + str(idx) + "_enhanced.png")
     cv2.imwrite(output + "lowcontrast_image_" + str(idx) + "_result.jpg", enhanced)
     return enhanced
 
