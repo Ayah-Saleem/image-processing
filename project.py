@@ -210,9 +210,13 @@ def enhance_noisy(img, idx):
 
 def enhance_blurred(img, idx):
     print("\n[Blurred] Processing image " + str(idx))
-    laplacian = cv2.Laplacian(img, cv2.CV_64F)
+    
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    laplacian = cv2.Laplacian(gray, cv2.CV_64F)
     laplacian = np.uint8(np.abs(laplacian))
-    sharpened = cv2.add(img, laplacian)
+    laplacian_3ch = cv2.cvtColor(laplacian, cv2.COLOR_GRAY2BGR)
+    sharpened = cv2.add(img, laplacian_3ch)
+    
     show_comparison(img, sharpened, "blurred_image_" + str(idx) + "_enhanced.png")
     cv2.imwrite(output + "blurred_image_" + str(idx) + "_result.jpg", sharpened)
     return sharpened
